@@ -1,26 +1,14 @@
 import contactsService from "../models/index.js";
 import HttpError from "../helpers/HttpError.js";
 import { controllersWrapper } from "../decorators/index.js";
-import Joi from "joi";
+import { contactAddSchema } from "../schemas/index.js";
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-  phone: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-});
-
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
   const result = await contactsService.listContacts();
   res.json(result);
 };
 
-const getById = async (req, res, next) => {
+const getById = async (req, res) => {
   const { contactId } = req.params;
   const result = await contactsService.getContactById(contactId);
   if (!result) {
@@ -29,16 +17,12 @@ const getById = async (req, res, next) => {
   res.json(result);
 };
 
-const addNew = async (req, res, next) => {
-  const { error } = contactAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
+const addNew = async (req, res) => {
   const result = await contactsService.addContact(req.body);
   res.status(201).json(result);
 };
 
-const removeById = async (req, res, next) => {
+const removeById = async (req, res) => {
   const { contactId } = req.params;
   const result = await contactsService.removeContact(contactId);
   if (!result) {
@@ -47,11 +31,9 @@ const removeById = async (req, res, next) => {
   return res.status(200).json({ message: "contact deleted" });
 };
 
-const updateById = async (req, res, next) => {
+const updateById = async (req, res) => {
   const { error } = contactAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
+
   const { contactId } = req.params;
   const result = await contactsService.updateContact(contactId, req.body);
   if (!result) {
