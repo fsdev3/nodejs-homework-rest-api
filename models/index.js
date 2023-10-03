@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
 
-const contactPath = path.resolve("models", "contacts.json");
+// const contactPath = path.resolve("models", "contacts.json");
 
 const listContacts = async () => {
   const buffer = await fs.readFile(contactPath);
