@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-import handleSaveError from "./hooks.js";
+import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
 
 const contactSchema = new Schema(
   {
@@ -14,9 +14,13 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleSaveError); // mongoose hook (.post): after save send error
 
+contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate); // mongoose pre hook
+
+contactSchema.post("findOneAndUpdate", handleSaveError);
+
 const Contact = model("contact", contactSchema);
 
-const contactAddSchema = Joi.object({
+export const contactAddSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `missing required name field`,
   }),
@@ -29,4 +33,8 @@ const contactAddSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-export default { Contact, contactAddSchema };
+export const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+export default Contact;
