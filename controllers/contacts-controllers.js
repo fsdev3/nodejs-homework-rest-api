@@ -1,13 +1,17 @@
 // import contactsService from "../models/index.---js";
 import HttpError from "../helpers/HttpError.js";
 import { controllersWrapper } from "../decorators/index.js";
-import { contactAddSchema } from "../schemas/index.js";
+import { contactAddSchema } from "../models/Contact.js";
 import Contact from "../models/Contact.js";
 
 const getAll = async (req, res) => {
   const result = await Contact.find();
   res.json(result);
 };
+
+// const getById = (contactId) => {
+//   return Contact.findOne({ _id: contactId });
+// };
 
 // const getById = async (req, res) => {
 //   const { contactId } = req.params;
@@ -18,10 +22,10 @@ const getAll = async (req, res) => {
 //   res.json(result);
 // };
 
-// const addNew = async (req, res) => {
-//   const result = await contactsService.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const addNew = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
 // const removeById = async (req, res) => {
 //   const { contactId } = req.params;
@@ -46,7 +50,7 @@ const getAll = async (req, res) => {
 export default {
   getAll: controllersWrapper(getAll),
   // getById: controllersWrapper(getById),
-  // addNew: controllersWrapper(addNew),
+  addNew: controllersWrapper(addNew),
   // updateById: controllersWrapper(updateById),
   // removeById: controllersWrapper(removeById),
 };
