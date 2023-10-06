@@ -1,5 +1,5 @@
 import express from "express";
-import contactsControllers from "../../controllers/contacts-controllers.js";
+import contactControllers from "../../controllers/contacts/index.js";
 import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 import {
   contactAddSchema,
@@ -12,20 +12,20 @@ const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 
 const router = express.Router();
 
-router.get("/", contactsControllers.getAll);
+router.get("/", contactControllers.getAll);
 
-router.get("/:contactId", isValidId, contactsControllers.getById);
+router.get("/:contactId", isValidId, contactControllers.getById);
 
-router.post("/", isEmptyBody, contactAddValidate, contactsControllers.addNew);
+router.post("/", isEmptyBody, contactAddValidate, contactControllers.addNew);
 
-router.delete("/:contactId", isValidId, contactsControllers.removeById);
+router.delete("/:contactId", isValidId, contactControllers.removeById);
 
 router.put(
   "/:contactId",
   isEmptyBody,
   isValidId,
   contactAddValidate,
-  contactsControllers.updateById
+  contactControllers.updateById
 );
 
 router.patch(
@@ -33,7 +33,7 @@ router.patch(
   isEmptyBody,
   isValidId,
   contactUpdateFavoriteValidate,
-  contactsControllers.updateFavoriteById
+  contactControllers.updateFavoriteById
 );
 
 export default router;
