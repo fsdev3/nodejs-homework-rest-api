@@ -1,6 +1,8 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 import contactsRouter from "./routes/api/contacts-router.js";
 
@@ -12,7 +14,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/routes/api/contacts", contactsRouter); // /api/contacts ?
+app.use("/routes/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
