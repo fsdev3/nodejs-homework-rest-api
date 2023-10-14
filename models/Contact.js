@@ -18,8 +18,6 @@ contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate); // mongoose pre ho
 
 contactSchema.post("findOneAndUpdate", handleSaveError);
 
-const Contact = model("contact", contactSchema);
-
 export const contactAddSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `missing required name field`,
@@ -32,6 +30,8 @@ export const contactAddSchema = Joi.object({
   }),
   favorite: Joi.boolean(),
 });
+
+const Contact = model("contact", contactSchema);
 
 export const contactUpdateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
