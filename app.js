@@ -27,6 +27,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-console.log("Loaded Environment Variables:", process.env);
-
 export default app;

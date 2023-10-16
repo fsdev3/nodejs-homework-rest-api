@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import User from "../../models/User.js";
 import HttpError from "../../helpers/HttpError.js";
 import { controllersWrapper } from "../../decorators/index.js";
-import User from "../../models/User.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const { JWT_SECRET } = process.env;
 console.log("JWT_SECRET:", JWT_SECRET);
