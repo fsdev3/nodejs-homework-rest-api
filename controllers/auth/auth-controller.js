@@ -4,6 +4,7 @@ import User from "../../models/User.js";
 import HttpError from "../../helpers/HttpError.js";
 import { controllersWrapper } from "../../decorators/index.js";
 import dotenv from "dotenv";
+import authenticate from "../../middlewares/authenticate.js";
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
@@ -33,10 +34,24 @@ const signin = async (req, res) => {
 
   const payload = { id: user._id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token }); // we save token when login is successful
   res.json({ token });
+};
+
+const getCurrent = async (req, res) => {
+  const { username, email } = req.user;
+  res.json({ username, email });
+};
+
+const signout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.json({ message: "Signout success" });
 };
 
 export default {
   signup: controllersWrapper(signup),
   signin: controllersWrapper(signin),
+  signout: controllersWrapper(signout),
+  getCurrent: controllersWrapper(getCurrent),
 };
