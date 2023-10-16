@@ -6,10 +6,14 @@ const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
   {
-    username: { type: String, required: true },
     email: { type: String, match: emailRegexp, unique: true, required: true },
     password: { type: String, minlength: 6, required: true },
-    token: { type: String },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
+    token: { type: String, default: null },
   },
   { versionKey: false, timestamps: true }
 );
@@ -21,7 +25,6 @@ userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate); // mongoose pre hook
 userSchema.post("findOneAndUpdate", handleSaveError);
 
 export const userSignupSchema = Joi.object({
-  username: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });

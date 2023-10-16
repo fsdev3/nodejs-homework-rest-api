@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import User from "../../models/User.js";
 import HttpError from "../../helpers/HttpError.js";
 import { controllersWrapper } from "../../decorators/index.js";
-import dotenv from "dotenv";
 import authenticate from "../../middlewares/authenticate.js";
+import dotenv from "dotenv";
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
@@ -13,12 +13,14 @@ const signup = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw HttpError(409, `${email} is already registered`);
+    throw HttpError(409, `Email in use`);
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({ ...req.body, password: hashPassword });
-  res.status(201).json({ username: newUser.username, email: newUser.email });
+  res
+    .status(201)
+    .json({ email: newUser.email, subscription: newUser.subscription });
 };
 
 const signin = async (req, res) => {
@@ -35,7 +37,9 @@ const signin = async (req, res) => {
   const payload = { id: user._id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token }); // we save token when login is successful
-  res.json({ token });
+  res
+    .status(200)
+    .json({ email: user.email, subscription: user.subscription, token });
 };
 
 const getCurrent = async (req, res) => {
