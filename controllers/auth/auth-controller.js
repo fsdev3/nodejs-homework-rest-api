@@ -7,7 +7,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
-console.log("JWT_SECRET:", JWT_SECRET);
 
 const signup = async (req, res) => {
   const { email, password } = req.body;

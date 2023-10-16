@@ -1,6 +1,10 @@
 import express from "express";
 import contactControllers from "../../controllers/contacts/index.js";
-import { isEmptyBody, isValidId } from "../../middlewares/index.js";
+import {
+  isEmptyBody,
+  isValidId,
+  authenticate,
+} from "../../middlewares/index.js";
 import {
   contactAddSchema,
   contactUpdateFavoriteSchema,
@@ -11,6 +15,8 @@ const contactAddValidate = validateBody(contactAddSchema);
 const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 
 const router = express.Router();
+
+router.use(authenticate); //every routes uses middleware authenticate
 
 router.get("/", contactControllers.getAll);
 
