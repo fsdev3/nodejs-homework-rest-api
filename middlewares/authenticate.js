@@ -22,7 +22,7 @@ const authenticate = async (req, res, next) => {
       throw HttpError(401);
     }
 
-    req.user = user; //add info to main request about user to get id to Schema
+    req.user = user; //add info to main request about user to get _id to Schema
     next();
   } catch (error) {
     next(HttpError(401));

@@ -12,6 +12,7 @@ import {
 import { validateBody } from "../../decorators/index.js";
 
 const contactAddValidate = validateBody(contactAddSchema);
+
 const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 
 const router = express.Router();

@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import User from "../../models/User.js";
 import HttpError from "../../helpers/HttpError.js";
 import { controllersWrapper } from "../../decorators/index.js";
-import authenticate from "../../middlewares/authenticate.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -43,14 +42,14 @@ const signin = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { username, email } = req.user;
-  res.json({ username, email });
+  const { subscription, email } = req.user;
+  res.json({ email, subscription });
 };
 
 const signout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-  res.json({ message: "Signout success" });
+  res.json({ message: "No content" }); // when I add .status(204) - postman respond is empty
 };
 
 export default {
