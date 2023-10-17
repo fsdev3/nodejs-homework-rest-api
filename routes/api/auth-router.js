@@ -1,5 +1,5 @@
 import express from "express";
-import authController from "../../controllers/auth/auth-controller.js";
+import authControllers from "../../controllers/auth/index.js";
 import { isEmptyBody, authenticate } from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
 import { userSignupSchema, userSigninSchema } from "../../models/User.js";
@@ -13,18 +13,18 @@ authRouter.post(
   "/users/register",
   isEmptyBody,
   userSignupValidate,
-  authController.signup
+  authControllers.signupUser
 );
 
 authRouter.post(
   "/users/login",
   isEmptyBody,
   userSigninValidate,
-  authController.signin
+  authControllers.signinUser
 );
 
-authRouter.get("/users/current", authenticate, authController.getCurrent);
+authRouter.get("/users/current", authenticate, authControllers.getCurrentUser);
 
-authRouter.post("/users/logout", authenticate, authController.signout);
+authRouter.post("/users/logout", authenticate, authControllers.signoutUser);
 
 export default authRouter;
