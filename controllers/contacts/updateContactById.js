@@ -4,9 +4,13 @@ import HttpError from "../../helpers/HttpError.js";
 import { contactAddSchema } from "../../models/Contact.js";
 
 const updateById = async (req, res) => {
+  const { _id: owner } = req.user;
   const { error } = contactAddSchema.validate(req.body);
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body
+  );
   if (!result) {
     throw HttpError(404, error, `Contact Id ${contactId} Not Found`);
   }

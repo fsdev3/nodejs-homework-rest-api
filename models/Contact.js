@@ -8,6 +8,11 @@ const contactSchema = new Schema(
     email: { type: String },
     phone: { type: String },
     favorite: { type: Boolean, default: false },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -17,8 +22,6 @@ contactSchema.post("save", handleSaveError); // mongoose hook (.post): after sav
 contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate); // mongoose pre hook
 
 contactSchema.post("findOneAndUpdate", handleSaveError);
-
-const Contact = model("contact", contactSchema);
 
 export const contactAddSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -32,6 +35,8 @@ export const contactAddSchema = Joi.object({
   }),
   favorite: Joi.boolean(),
 });
+
+const Contact = model("contact", contactSchema);
 
 export const contactUpdateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),

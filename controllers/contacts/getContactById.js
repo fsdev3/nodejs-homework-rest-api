@@ -3,8 +3,9 @@ import { controllersWrapper } from "../../decorators/index.js";
 import HttpError from "../../helpers/HttpError.js";
 
 const getById = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findOne({ _id: contactId, owner });
   if (!result) {
     throw HttpError(404, `Contact Id ${contactId} Not Found`);
   }
