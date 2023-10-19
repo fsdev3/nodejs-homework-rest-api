@@ -1,7 +1,12 @@
+import fs from "fs/promises";
+import path from "path";
+
 import bcrypt from "bcryptjs";
 import User from "../../models/User.js";
 import HttpError from "../../helpers/HttpError.js";
 import { controllersWrapper } from "../../decorators/index.js";
+
+const avatarPath = path.resolve("public", "avatars");
 
 const signupUser = async (req, res) => {
   const { email, password } = req.body;
@@ -11,7 +16,17 @@ const signupUser = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarPath, filename);
+  await fs.rename(oldPath, newPath);
+  const avatar = path.join("avatars", filename);
+
+  const newUser = await User.create({
+    ...req.body,
+    avatar,
+    password: hashPassword,
+  });
   res
     .status(201)
     .json({ email: newUser.email, subscription: newUser.subscription });
