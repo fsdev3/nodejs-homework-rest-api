@@ -1,12 +1,13 @@
-import fs from "fs/promises";
-import path from "path";
+// import fs from "fs/promises";
+// import path from "path";
+import gravatar from "gravatar";
 
 import bcrypt from "bcryptjs";
 import User from "../../models/User.js";
 import HttpError from "../../helpers/HttpError.js";
 import { controllersWrapper } from "../../decorators/index.js";
 
-const avatarPath = path.resolve("public", "avatars");
+// const avatarPath = path.resolve("public", "avatars");
 
 const signupUser = async (req, res) => {
   const { email, password } = req.body;
@@ -17,14 +18,20 @@ const signupUser = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const { path: oldPath, filename } = req.file;
-  const newPath = path.join(avatarPath, filename);
-  await fs.rename(oldPath, newPath);
-  const avatar = path.join("avatars", filename);
+  // const { path: oldPath, filename } = req.file;
+  // const newPath = path.join(avatarPath, filename);
+  // await fs.rename(oldPath, newPath);
+  // const avatar = path.join("avatars", filename);
+
+  const avatarURL = gravatar.url(email, {
+    protocol: "http",
+    s: "250",
+    d: "identicon",
+  });
 
   const newUser = await User.create({
     ...req.body,
-    avatar,
+    avatarURL,
     password: hashPassword,
   });
   res
