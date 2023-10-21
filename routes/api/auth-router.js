@@ -29,8 +29,8 @@ authRouter.get("/users/current", authenticate, authControllers.getCurrentUser);
 
 authRouter.patch(
   "/users/avatars",
-  authenticate,
   upload.single("avatar"),
+  authenticate,
   authControllers.updateAvatar
 );
 
