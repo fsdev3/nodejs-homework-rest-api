@@ -14,6 +14,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public")); // let frontend to show the files from public/. and now frontend watching the public/ only.
 
 app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);

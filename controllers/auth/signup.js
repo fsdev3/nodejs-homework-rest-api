@@ -1,3 +1,4 @@
+import gravatar from "gravatar";
 import bcrypt from "bcryptjs";
 import User from "../../models/User.js";
 import HttpError from "../../helpers/HttpError.js";
@@ -11,7 +12,18 @@ const signupUser = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+
+  const avatarURL = gravatar.url(email, {
+    protocol: "http",
+    s: "250",
+    d: "identicon",
+  });
+
+  const newUser = await User.create({
+    ...req.body,
+    avatarURL,
+    password: hashPassword,
+  });
   res
     .status(201)
     .json({ email: newUser.email, subscription: newUser.subscription });

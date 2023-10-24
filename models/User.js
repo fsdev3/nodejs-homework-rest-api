@@ -8,6 +8,7 @@ const userSchema = new Schema(
   {
     email: { type: String, match: emailRegexp, unique: true, required: true },
     password: { type: String, minlength: 6, required: true },
+    avatarURL: { type: String, required: true },
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
