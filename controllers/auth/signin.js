@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../models/User.js";
-import HttpError from "../../helpers/HttpError.js";
+import { HttpError } from "../../helpers/index.js";
 import { controllersWrapper } from "../../decorators/index.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -13,6 +13,9 @@ const signinUser = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, `Email or password is invalid`);
+  }
+  if (!user.verify) {
+    throw HttpError(401, "Email is not verified!");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {

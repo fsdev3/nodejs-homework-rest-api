@@ -4,6 +4,10 @@ import { nanoid } from "nanoid";
 import User from "../../models/User.js";
 import { HttpError, sendEmail } from "../../helpers/index.js";
 import { controllersWrapper } from "../../decorators/index.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+const { BASE_URL } = process.env;
 
 const signupUser = async (req, res) => {
   const { email, password } = req.body;
@@ -31,7 +35,7 @@ const signupUser = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Email verification",
-    html: `<a target="_blank" href="http://localhost:3000/api/auth/verify/${verificationToken}" >Click to verify your email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${verificationToken}">Click to verify your email</a>`,
   };
   await sendEmail(verifyEmail);
 

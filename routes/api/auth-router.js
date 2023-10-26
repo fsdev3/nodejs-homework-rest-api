@@ -23,6 +23,9 @@ authRouter.post(
   userSigninValidate,
   authControllers.signinUser
 );
+
+authRouter.get("/users/verify/:verificationToken", authControllers.verifyEmail);
+
 authRouter.post("/users/logout", authenticate, authControllers.signoutUser);
 
 authRouter.get("/users/current", authenticate, authControllers.getCurrentUser);
