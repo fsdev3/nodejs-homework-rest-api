@@ -2,10 +2,15 @@ import express from "express";
 import authControllers from "../../controllers/auth/index.js";
 import { upload, isEmptyBody, authenticate } from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
-import { userSignupSchema, userSigninSchema } from "../../models/User.js";
+import {
+  userSignupSchema,
+  userSigninSchema,
+  userEmailSchema,
+} from "../../models/User.js";
 
 const userSignupValidate = validateBody(userSignupSchema);
 const userSigninValidate = validateBody(userSigninSchema);
+const userEmailValidate = validateBody(userEmailSchema);
 
 const authRouter = express.Router();
 
@@ -25,6 +30,13 @@ authRouter.post(
 );
 
 authRouter.get("/users/verify/:verificationToken", authControllers.verifyEmail);
+
+authRouter.post(
+  "/users/verify",
+  isEmptyBody,
+  userEmailValidate,
+  authControllers.resendVerifyEmail
+);
 
 authRouter.post("/users/logout", authenticate, authControllers.signoutUser);
 
